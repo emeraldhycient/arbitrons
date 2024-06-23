@@ -1,26 +1,30 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '@/lib/prisma'; // Adjust the import path as needed
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-    const { id } = params;
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const { id } = req.query;
+
+    if (!id) {
+        return res.status(400).json({ error: 'Invoice ID is required' });
+    }
+
     try {
         const invoice = await prisma.invoice.findUnique({
-            where: { id: Number(id) },
-            include: {
-                client: true,
-                items: true,
-            },
+            where: { id: parseInt(id as string, 10) },
         });
 
         if (!invoice) {
-            return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
+            return res.status(404).json({ error: 'Invoice not found' });
         }
 
-        return NextResponse.json(invoice, { status: 200 });
+        res.status(200).json(invoice);
     } catch (error) {
-        return NextResponse.json({ error: 'Failed to fetch invoice' }, { status: 500 });
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
     const { id } = params;
