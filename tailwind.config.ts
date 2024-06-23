@@ -10,13 +10,20 @@ const config: Config = {
     extend: {
       colors: {
         neonGreen: "#39FF14",
-        neonPurple: "#B026FF", // Add neon purple color
-        blackBg: "#111111", // Dark black for background
+        neonPurple: "#B026FF",
+        blackBg: "#111111", 
+        darkBg: '#121212',
+        cardBg: '#1E1E1E',
+        lightText: '#E0E0E0',
+        grayText: '#B3B3B3',
+        highlight: '#3F3F3F',
+        accent: '#FF0000',
+
       },
       keyframes: {
         'pulse-glow-sm': {
-          '0%, 100%': { boxShadow: '0 0 6px #B026FF, 0 0 12px #B026FF' },
-          '50%': { boxShadow: '0 0 12px #B026FF, 0 0 24px #B026FF' },
+          '0%, 100%': { boxShadow: '0 0 3px #B026FF, 0 0 6px #B026FF' },
+          '50%': { boxShadow: '0 0 6px #B026FF, 0 0 12px #B026FF' },
         },
       },
       animation: {

@@ -1,3 +1,87 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* globals.css */
+body {
+    font-family: "Poppins", "Open Sans", sans-serif;
+    background-color: #121212;
+    /* Dark background color */
+    color: #ffffff;
+    /* Light text color for dark theme */
+    font-weight: 400;
+    /* Default weight */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Poppins", "Open Sans", sans-serif;
+    font-weight: 700;
+    /* Use bold for headings */
+}
+
+p,
+span,
+a,
+li {
+    font-family: "Poppins", "Open Sans", sans-serif;
+    font-weight: 400;
+    /* Normal weight for body text */
+}
+
+/* Custom styles for different font weights */
+.font-thin {
+    font-weight: 100;
+    /* Thin */
+}
+
+.font-extra-light {
+    font-weight: 200;
+    /* Extra Light */
+}
+
+.font-light {
+    font-weight: 300;
+    /* Light */
+}
+
+.font-normal {
+    font-weight: 400;
+    /* Normal */
+}
+
+.font-medium {
+    font-weight: 500;
+    /* Medium */
+}
+
+.font-semibold {
+    font-weight: 600;
+    /* Semi Bold */
+}
+
+.font-bold {
+    font-weight: 700;
+    /* Bold */
+}
+
+.font-extra-bold {
+    font-weight: 800;
+    /* Extra Bold */
+}
+
+.font-black {
+    font-weight: 900;
+    /* Black */
+}
+
+/* Ensure other global styles use the same font family */
+button,
+input,
+textarea {
+    font-family: "Poppins", "Open Sans", sans-serif;
+}
