@@ -111,8 +111,7 @@ const Dashboard: React.FC = () => {
                 title="Dashboard - Invoice101"
                 description="Dashboard and management system"
                 leftComponent={<Link href="/"><span className="text-lg font-bold">Dashboard</span></Link>}
-                centerComponent={<span className="text-md">Welcome to your dashboard</span>}
-                rightComponent={<Button variant="primary" size="small" onClick={() => alert('Primary Button Clicked')}>Create invoice <FaPlus className='mx-2'/></Button>}
+                rightComponent={<Button variant="primary" size="small" onClick={() => alert('Primary Button Clicked')}>Invoices <FaPlus className='mx-2'/></Button>}
             />
             <div className="p-8 md:px-24 md:py-16 bg-darkBg text-lightText overflow-y-auto">
                <MetricsGrid/>

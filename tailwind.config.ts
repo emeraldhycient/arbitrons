@@ -50,6 +50,7 @@ const config: Config = {
         errorRed: '#FF4C4C',
         warningYellow: '#FFC107',
         successGreen: '#28A745',
+        
       },
       keyframes: {
         'pulse-glow-sm': {

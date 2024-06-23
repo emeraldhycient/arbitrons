@@ -14,3 +14,11 @@ export interface NavItem {
     label: string;
     icon: IconType;
 }
+
+
+export interface Invoice {
+    id: number;
+    client: { name: string };
+    totalAmount: number;
+    status: string;
+}
