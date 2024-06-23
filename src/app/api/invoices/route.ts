@@ -17,9 +17,12 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
-        const { clientId, items, totalAmount, status, dueDate, scheduleSend } = await request.json();
+        const { userId, clientId, items, totalAmount, status, dueDate, scheduleSend } = await request.json();
+
         const newInvoice = await prisma.invoice.create({
             data: {
+                user: { connect: { id: userId } }, // Use connect to link the user
+                client: { connect: { id: clientId } },
                 clientId,
                 totalAmount,
                 status,
