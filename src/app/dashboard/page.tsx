@@ -114,7 +114,7 @@ const Dashboard: React.FC = () => {
                 centerComponent={<span className="text-md">Welcome to your dashboard</span>}
                 rightComponent={<Button variant="primary" size="small" onClick={() => alert('Primary Button Clicked')}>Create invoice <FaPlus className='mx-2'/></Button>}
             />
-            <div className="p-8 md:p-24 bg-darkBg text-lightText overflow-y-auto">
+            <div className="p-8 md:px-24 md:py-16 bg-darkBg text-lightText overflow-y-auto">
                <MetricsGrid/>
                 <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-3">
                     <div className="bg-cardBg p-3 rounded-lg shadow-md">

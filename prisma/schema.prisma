@@ -1,0 +1,262 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // Assuming PostgreSQL is used
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  password      String
+  firstName     String
+  lastName      String
+  businessInfo  BusinessInfo?
+  clients       Client[]
+  invoices      Invoice[]
+  estimates     Estimate[]
+  bills         Bill[]
+  appointments  Appointment[]
+  notifications Notification[]
+  reminders     Reminder[]  // Added this line for the relationship with Reminder
+  paymentPlans  PaymentPlan[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model BusinessInfo {
+  id              Int      @id @default(autoincrement())
+  userId          Int      @unique
+  businessName    String
+  address         String
+  phone           String
+  email           String
+  website         String?
+  taxId           String?
+  customTemplates Template[]
+  settings        Json     // Business settings stored as JSON
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+model Client {
+  id             Int       @id @default(autoincrement())
+  userId         Int
+  name           String
+  email          String
+  phone          String?
+  address        String?
+  invoices       Invoice[]
+  estimates      Estimate[]
+  appointments   Appointment[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  user           User      @relation(fields: [userId], references: [id])
+}
+
+model Invoice {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  clientId       Int
+  items          Item[]
+  totalAmount    Float
+  status         InvoiceStatus
+  dueDate        DateTime
+  scheduleSend   DateTime?    // Field to schedule the sending of the invoice
+  sendStatus     SendStatus   @default(NOT_SENT) // To track if the scheduled invoice was sent
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User         @relation(fields: [userId], references: [id])
+  client         Client       @relation(fields: [clientId], references: [id])
+  payments       Payment[]
+  reminders      Reminder[]
+}
+
+model Estimate {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  clientId       Int
+  items          Item[]
+  totalAmount    Float
+  status         EstimateStatus
+  expirationDate DateTime
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User         @relation(fields: [userId], references: [id])
+  client         Client       @relation(fields: [clientId], references: [id])
+}
+
+model Bill {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  vendorName     String
+  items          Item[]
+  totalAmount    Float
+  status         BillStatus
+  dueDate        DateTime
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User         @relation(fields: [userId], references: [id])
+}
+
+model Item {
+  id          Int       @id @default(autoincrement())
+  description String
+  quantity    Int
+  price       Float
+  invoiceId   Int?
+  estimateId  Int?
+  billId      Int?
+  invoice     Invoice?  @relation(fields: [invoiceId], references: [id])
+  estimate    Estimate? @relation(fields: [estimateId], references: [id])
+  bill        Bill?     @relation(fields: [billId], references: [id])
+}
+
+model Payment {
+  id          Int       @id @default(autoincrement())
+  invoiceId   Int
+  amount      Float
+  paymentDate DateTime  @default(now())
+  paymentMethod PaymentMethod
+  status      PaymentStatus
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  invoice     Invoice   @relation(fields: [invoiceId], references: [id])
+}
+
+model Appointment {
+  id             Int       @id @default(autoincrement())
+  userId         Int
+  clientId       Int
+  date           DateTime
+  duration       Int       // in minutes
+  notes          String?
+  reminderSent   Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  user           User      @relation(fields: [userId], references: [id])
+  client         Client    @relation(fields: [clientId], references: [id])
+  reminders      Reminder[]
+}
+
+model Reminder {
+  id             Int         @id @default(autoincrement())
+  userId         Int
+  invoiceId      Int?
+  appointmentId  Int?
+  type           ReminderType
+  scheduledTime  DateTime
+  status         ReminderStatus @default(PENDING)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User         @relation(fields: [userId], references: [id])
+  invoice        Invoice?     @relation(fields: [invoiceId], references: [id])
+  appointment    Appointment? @relation(fields: [appointmentId], references: [id])
+}
+
+model Notification {
+  id             Int       @id @default(autoincrement())
+  userId         Int
+  content        String
+  type           NotificationType
+  read           Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  user           User      @relation(fields: [userId], references: [id])
+}
+
+model PaymentPlan {
+  id             Int       @id @default(autoincrement())
+  userId         Int
+  planName       String
+  price          Float
+  duration       Int       // in months
+  features       String[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  user           User      @relation(fields: [userId], references: [id])
+}
+
+model Template {
+  id             Int       @id @default(autoincrement())
+  businessInfoId Int
+  templateType   TemplateType
+  content        Json
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  businessInfo   BusinessInfo @relation(fields: [businessInfoId], references: [id])
+}
+
+// Enums
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+}
+
+enum SendStatus {
+  NOT_SENT
+  SCHEDULED
+  SENT
+}
+
+enum EstimateStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+enum BillStatus {
+  UNPAID
+  PAID
+  OVERDUE
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  BANK_TRANSFER
+  PAYPAL
+  CASH
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum ReminderType {
+  INVOICE
+  APPOINTMENT
+}
+
+enum ReminderStatus {
+  PENDING
+  SENT
+}
+
+enum NotificationType {
+  INVOICE
+  ESTIMATE
+  BILL
+  APPOINTMENT
+}
+
+enum TemplateType {
+  INVOICE
+  ESTIMATE
+  BILL
+  REPORT
+}
