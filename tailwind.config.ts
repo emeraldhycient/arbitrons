@@ -8,6 +8,20 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        neonGreen: "#39FF14",
+        neonPurple: "#B026FF", // Add neon purple color
+        blackBg: "#111111", // Dark black for background
+      },
+      keyframes: {
+        'pulse-glow-sm': {
+          '0%, 100%': { boxShadow: '0 0 6px #B026FF, 0 0 12px #B026FF' },
+          '50%': { boxShadow: '0 0 12px #B026FF, 0 0 24px #B026FF' },
+        },
+      },
+      animation: {
+        'pulse-glow-sm': 'pulse-glow-sm 2s infinite',
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
