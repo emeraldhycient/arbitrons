@@ -1,4 +1,3 @@
-// pages/dashboard.tsx
 'use client';
 
 import React from 'react';
@@ -15,8 +14,13 @@ import {
     Legend,
     ArcElement,
 } from 'chart.js';
-import CustomHead from '@/components/common/customHead';
 import Link from 'next/link';
+import CustomHead from '@/components/common/customHead';
+import Button from '@/components/common/button';
+import { FaPlus } from "react-icons/fa";
+import TransactionList from '@/components/dashboard/transactions';
+import MetricsGrid from '@/components/dashboard/metricsGrid';
+
 
 ChartJS.register(
     CategoryScale,
@@ -102,37 +106,16 @@ const Dashboard: React.FC = () => {
     };
 
     return (
-        <div className='w-full'>
+        <div className="h-full">
             <CustomHead
                 title="Dashboard - Invoice101"
                 description="Dashboard and management system"
                 leftComponent={<Link href="/"><span className="text-lg font-bold">Dashboard</span></Link>}
                 centerComponent={<span className="text-md">Welcome to your dashboard</span>}
-                rightComponent={<Link href="/profile"><span className="text-md">Profile</span></Link>}
+                rightComponent={<Button variant="primary" size="small" onClick={() => alert('Primary Button Clicked')}>Create invoice <FaPlus className='mx-2'/></Button>}
             />
-            <div className="flex-1 p-4 bg-darkBg text-lightText overflow-y-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    <div className="bg-cardBg p-3 rounded-lg shadow-md flex flex-col justify-between">
-                        <h2 className="text-sm font-bold mb-1">Total Invoices</h2>
-                        <p className="text-sm font-medium">120</p>
-                        <span className="text-xs text-green-400">↑ 10% from last month</span>
-                    </div>
-                    <div className="bg-cardBg p-3 rounded-lg shadow-md flex flex-col justify-between">
-                        <h2 className="text-sm font-bold mb-1">Pending Payments</h2>
-                        <p className="text-sm font-medium">$5,000</p>
-                        <span className="text-xs text-red-400">↓ 5% from last month</span>
-                    </div>
-                    <div className="bg-cardBg p-3 rounded-lg shadow-md flex flex-col justify-between">
-                        <h2 className="text-sm font-bold mb-1">Upcoming Appointments</h2>
-                        <p className="text-sm font-medium">25</p>
-                        <span className="text-xs text-green-400">↑ 20% from last month</span>
-                    </div>
-                    <div className="bg-cardBg p-3 rounded-lg shadow-md flex flex-col justify-between">
-                        <h2 className="text-sm font-bold mb-1">Monthly Revenue</h2>
-                        <p className="text-sm font-medium">$20,000</p>
-                        <span className="text-xs text-green-400">↑ 15% from last month</span>
-                    </div>
-                </div>
+            <div className="p-8 md:p-24 bg-darkBg text-lightText overflow-y-auto">
+               <MetricsGrid/>
                 <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-3">
                     <div className="bg-cardBg p-3 rounded-lg shadow-md">
                         <h2 className="text-sm font-bold mb-1">Revenue Over Time</h2>
@@ -150,37 +133,27 @@ const Dashboard: React.FC = () => {
                     </div>
                     <div className="bg-cardBg p-3 rounded-lg shadow-md">
                         <h2 className="text-sm font-bold mb-1">Recent Transactions</h2>
-                        <ul className="space-y-1">
-                            <li className="flex justify-between items-center">
-                                <span className="text-xs">Invoice #123</span>
-                                <span className="text-sm font-medium">$500</span>
-                                <span className="text-xs text-green-400">Paid</span>
-                            </li>
-                            <li className="flex justify-between items-center">
-                                <span className="text-xs">Invoice #124</span>
-                                <span className="text-sm font-medium">$750</span>
-                                <span className="text-xs text-yellow-400">Pending</span>
-                            </li>
-                            <li className="flex justify-between items-center">
-                                <span className="text-xs">Invoice #125</span>
-                                <span className="text-sm font-medium">$1,200</span>
-                                <span className="text-xs text-red-400">Overdue</span>
-                            </li>
-                        </ul>
+                       <TransactionList/>
                     </div>
                 </div>
-                <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-3">
-                    <div className="bg-cardBg p-3 rounded-lg shadow-md">
-                        <h2 className="text-sm font-bold mb-1">Revenue by Category</h2>
-                        <Pie data={revenueByCategoryData} options={{ responsive: true }} />
+                <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <div className="bg-cardBg p-5 rounded-xl shadow-lg transition-transform transform hover:scale-105">
+                        <h2 className="text-sm font-bold text-lightText mb-2">Revenue by Category</h2>
+                        <div className="h-48">
+                            <Pie data={revenueByCategoryData} options={{ responsive: true }} />
+                        </div>
                     </div>
-                    <div className="bg-cardBg p-3 rounded-lg shadow-md">
-                        <h2 className="text-sm font-bold mb-1">Invoice Status Breakdown</h2>
-                        <Pie data={invoiceStatusData} options={{ responsive: true }} />
+                    <div className="bg-cardBg p-5 rounded-xl shadow-lg transition-transform transform hover:scale-105">
+                        <h2 className="text-sm font-bold text-lightText mb-2">Invoice Status Breakdown</h2>
+                        <div className="h-48">
+                            <Pie data={invoiceStatusData} options={{ responsive: true }} />
+                        </div>
                     </div>
-                    <div className="bg-cardBg p-3 rounded-lg shadow-md">
-                        <h2 className="text-sm font-bold mb-1">Weekly Active Users</h2>
-                        <Line data={weeklyActiveUsersData} options={{ responsive: true }} />
+                    <div className="bg-cardBg p-5 rounded-xl shadow-lg transition-transform transform hover:scale-105">
+                        <h2 className="text-sm font-bold text-lightText mb-2">Weekly Active Users</h2>
+                        <div className="h-48">
+                            <Line data={weeklyActiveUsersData} options={{ responsive: true }} />
+                        </div>
                     </div>
                 </div>
             </div>

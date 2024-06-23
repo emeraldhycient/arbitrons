@@ -1,4 +1,3 @@
-// components/Sidebar.tsx
 'use client';
 import React from 'react';
 import Link from 'next/link';
@@ -14,13 +13,13 @@ const Sidebar: React.FC<{ isOpen?: boolean; setSidebarOpen?: (isOpen: boolean) =
         pathname === path ? 'bg-blackBg text-neonPurple animate-pulse-glow-sm' : '';
 
     return (
-        <div className={`fixed inset-0 bg-blackBg transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 sm:relative sm:translate-x-0 sm:w-64 z-50 border-r border-gray-700 shadow-lg sm:shadow-2xl sm:rounded-lg`}>
+        <div className={`fixed inset-y-0 left-0 bg-blackBg transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 sm:relative sm:translate-x-0 sm:w-64 z-50 border-r border-gray-700 shadow-lg sm:shadow-2xl sm:rounded-lg`}>
             <div className="sm:hidden flex justify-end p-4">
                 <button className="text-neonPurple" onClick={() => setSidebarOpen?.(false)}>
                     <FaTimes />
                 </button>
             </div>
-            <div className="p-4">
+            <div className="p-4 overflow-y-auto h-full">
                 <h2 className="text-2xl font-bold text-neonPurple mb-8">Invoice101</h2>
                 <nav>
                     <ul>
